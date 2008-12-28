@@ -57,11 +57,28 @@ list *list_nreverse(list *l) {
 }
 
 list *list_copy(list *l) {
-    if (l) {
-        return list_cons(list_first(l),
-                         list_copy(list_rest(l)));
-    } else {
-        return NULL;
+    list *cur = l;
+    list *newprev = NULL;
+    list *newcur = LIST_END;
+    list *init = NULL;
+
+    while (cur) {
+        newcur = list_cons(list_first(cur), LIST_END);
+        if (!init) {
+            init = newcur;
+        }
+        if (newprev) {
+            list_setrest(newprev, newcur);
+        }
+
+        newprev = newcur;
+        list_next(&cur);
     }
+
+    if (newprev) {
+        list_setrest(newprev, LIST_END);
+    }
+
+    return init;
 }
 
