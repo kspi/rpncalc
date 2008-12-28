@@ -1,7 +1,7 @@
 /*
- * rpncalc - a simple rpn calculator.
+ * rpncalc - paprastas RPN žymėjimo skaičiuotuvas.
  * 
- * Released into the public domain.
+ * Išleistas į public domain.
  *
  */
 
@@ -12,12 +12,17 @@
 #include "list.h"
 #include "predicates.h"
 #include "operators.h"
+#include "util.h"
+#include "numbers.h"
 
-#define MAX_TOKEN_LEN 255
 
+/*
+ * read_token - perskaito iš stream vieną žodį (žodžiai skiriami
+ * whitespace, žr. predicates.c, char_whitespace_p), ir jį grąžina.
+ * Vietą alokuoja pati.
+ */
 char *read_token(FILE* stream) {
-    char *buf = malloc(MAX_TOKEN_LEN);
-    int buf_i = 0;
+    char *buf = malloc(MAX_TOKEN_LEN); int buf_i = 0;
     
     int c_read;
     char c;
@@ -47,31 +52,32 @@ char *read_token(FILE* stream) {
     }
 }
 
+/*
+ * eval - iš stream skaito žodžius ir, jei jie skaičiai, įdeda į
+ * steką, o priešingu atveju bando kviesti atitinkamą operatorių.
+ */
 void eval(FILE* stream) {
     list_t *stk = LIST_END;
 
     char *tok = read_token(stdin);
     while (tok) {
         if (tok_number_p(tok)) {
-            long *v = malloc(sizeof(long));
-            (*v) = strtol(tok, NULL, 10);
-            stack_push(v, &stk);
+            stack_push(num_from_str(tok), &stk);
         } else {
             op_call(tok, &stk);
         }
         free(tok);
         tok = read_token(stdin);
     }
-    LIST_PRINT(long, "%d\n", stk);
     LIST_FOREACH(xs, stk) {
         free(list_first(xs));
     }
+
     list_free(stk);
 }
 
 int main(int argc, char **argv)
 {
-    eval(stdin);
-    
+    eval(stdin); 
     return EXIT_SUCCESS;
 }

@@ -1,10 +1,10 @@
 APP = rpncalc
 
-OBJS = main.o list.o predicates.o operators.o util.o
+OBJS = main.o list.o predicates.o operators.o util.o numbers.o
 
 CC = gcc
 CFLAGS = -g -ggdb -O0 -std=c99
-LIBS = 
+LIBS = -lm
 
 .PHONY: all
 all: $(APP)

@@ -1,3 +1,8 @@
+#define _GNU_SOURCE
+#include <string.h>
+#undef _GNU_SOURCE
+
+#include "util.h"
 #include "predicates.h"
 
 bool char_number_p(char c) {
@@ -30,4 +35,14 @@ bool tok_number_p(char *tok) {
 
 bool tok_word_p(char *tok) {
     return char_word_p(tok[0]);
+}
+
+bool char_in_str_p(char c, char *str) {
+    int strlen = strnlen(str, MAX_TOKEN_LEN);
+    for (int i = 0; i < strlen; i++) {
+        if (str[i] == c) {
+            return true;
+        }
+    }
+    return false;
 }
