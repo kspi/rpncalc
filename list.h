@@ -8,8 +8,11 @@ typedef struct list {
 list *list_cons(void *first, list *rest);
 void *list_first(list *l);
 void *list_rest(list *l);
+void list_setfirst(list *l, void* value);
+void list_setrest(list *l, list* value);
 void list_next(list **avar);
 void list_free(list *l);
+list *list_nreverse(list *l);
 list *list_copy(list *l);
 
 #define LIST_END NULL

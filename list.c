@@ -14,8 +14,16 @@ void *list_first(list *l) {
     return l->first;
 }
 
+void list_setfirst(list *l, void* value) {
+    l->first = value;
+}
+
 void *list_rest(list *l) {
     return l->rest;
+}
+
+void list_setrest(list *l, list* value) {
+    l->rest = value;
 }
 
 void list_next(list **avar) {
@@ -23,10 +31,29 @@ void list_next(list **avar) {
 }
 
 void list_free(list *l) {
-    if (l) {
-        list_free(list_rest(l));
-        free(l);
+    list *cur = l;
+    list *next;
+    
+    while (cur) {
+        next = list_rest(cur);
+        free(cur);
+        cur = next;
     }
+}
+
+list *list_nreverse(list *l) {
+    list *prev = LIST_END;
+    list *cur = l;
+    list *next;
+
+    while (cur) {
+        next = list_rest(cur);
+        list_setrest(cur, prev);
+        prev = cur;
+        cur = next;
+    }
+
+    return prev;
 }
 
 list *list_copy(list *l) {
