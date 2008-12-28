@@ -10,75 +10,68 @@
 #include <stdlib.h>
 
 #include "list.h"
+#include "predicates.h"
+#include "operators.h"
 
 #define MAX_TOKEN_LEN 255
 
-typedef int bool;
-#define true 1
-#define false 0
-
-
-bool number_char_p(char c) {
-    return ((c == '0') ||
-            (c == '1') ||
-            (c == '2') ||
-            (c == '3') ||
-            (c == '4') ||
-            (c == '5') ||
-            (c == '6') ||
-            (c == '7') ||
-            (c == '8') ||
-            (c == '9'));
-}
-
-bool whitespace_char_p(char c) {
-    return ((c == ' ')  ||
-            (c == '\t') ||
-            (c == '\n') ||
-            (c == '\r'));
-}
-
-bool token_char_p(char c) {
-    return (!number_char_p(c)) && (!whitespace_char_p(c));
-}
-
-list* read_tokens(FILE* stream)
-{
-    list* tokens = LIST_END;
-    char* token = malloc(MAX_TOKEN_LEN);
+char *read_token(FILE* stream) {
+    char *buf = malloc(MAX_TOKEN_LEN);
+    int buf_i = 0;
+    
     int c_read;
     char c;
-
-    token_pos = 0;
-    memset(token, 0, MAX_TOKEN_LEN);
 
     for (;;) {
         c_read = fgetc(stream);
         if (c_read == EOF) {
-            return tokens;
+            free(buf);
+            return NULL;
         }
         c = (char)c_read;
 
-        if (!whitespace_char_p) {
-            token[token_pos] = c;
-            token_pos++;
-        } 
+        if (!char_whitespace_p(c)) {
+            buf[buf_i] = c;
+            buf_i++;
+
+            if (buf_i == MAX_TOKEN_LEN) {
+                buf[buf_i] = '\0';
+                return buf;
+            }
+        } else {
+            if (buf_i != 0) {
+                buf[buf_i] = '\0';
+                return buf;
+            }
+        }
     }
+}
+
+void eval(FILE* stream) {
+    list_t *stk = LIST_END;
+
+    char *tok = read_token(stdin);
+    while (tok) {
+        if (tok_number_p(tok)) {
+            long *v = malloc(sizeof(long));
+            (*v) = strtol(tok, NULL, 10);
+            stack_push(v, &stk);
+        } else {
+            op_call(tok, &stk);
+        }
+        free(tok);
+        tok = read_token(stdin);
+    }
+    LIST_PRINT(long, "%d\n", stk);
+    LIST_FOREACH(xs, stk) {
+        free(list_first(xs));
+    }
+    list_free(stk);
 }
 
 int main(int argc, char **argv)
 {
-    int x = 1;
-    int y = 2;
-    int z = 5;
-    list *l = list_cons(&x,
-                        list_cons(&y,
-                                  list_cons(&z,
-                                            LIST_END)));
-    
-    LIST_PRINT(int, "%d\n", l);
-
-    list_free(l);
+    eval(stdin);
     
     return EXIT_SUCCESS;
 }

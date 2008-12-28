@@ -1,6 +1,6 @@
 APP = rpncalc
 
-OBJS = main.o list.o
+OBJS = main.o list.o predicates.o operators.o util.o
 
 CC = gcc
 CFLAGS = -g -ggdb -O0 -std=c99
