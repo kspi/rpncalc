@@ -1,6 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+typedef struct list_t {
+    void *first;
+    struct list_t *rest;
+} list_t;
+typedef list_t* stack_t;
+
+#define LIST_TYPES_DEFINED
 #include "list.h"
 
 
@@ -12,7 +19,7 @@ list_t *list_cons(void *first, list_t *rest) {
 }
 
 
-void *list_first(list_t *l) {
+void *list_first(const list_t *l) {
     return l->first;
 }
 
@@ -22,7 +29,7 @@ void list_setfirst(list_t *l, void* value) {
 }
 
 
-void *list_rest(list_t *l) {
+void *list_rest(const list_t *l) {
     return l->rest;
 }
 
@@ -32,7 +39,7 @@ void list_setrest(list_t *l, list_t* value) {
 }
 
 
-void list_next(list_t **avar) {
+void list_next(const list_t **avar) {
     (*avar) = list_rest(*avar);
 }
 
@@ -65,13 +72,13 @@ list_t *list_nreverse(list_t *l) {
 }
 
 
-list_t *list_reverse(list_t *l) {
+list_t *list_reverse(const list_t *l) {
     return list_nreverse(list_copy(l));
 }
 
 
-list_t *list_copy(list_t *l) {
-    list_t *cur = l;
+list_t *list_copy(const list_t *l) {
+    const list_t *cur = l;
     list_t *newprev = NULL;
     list_t *newcur = LIST_END;
     list_t *init = NULL;
@@ -97,8 +104,8 @@ list_t *list_copy(list_t *l) {
 }
 
 
-unsigned long list_length(list_t *l) {
-    unsigned long len = 0;
+long list_length(const list_t *l) {
+    long len = 0;
     LIST_FOREACH(cons, l) {
         len++;
     }

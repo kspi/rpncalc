@@ -29,15 +29,15 @@ bool char_word_p(char c) {
     return (!char_number_p(c)) && (!char_whitespace_p(c));
 }
 
-bool tok_number_p(char *tok) {
+bool tok_number_p(const char *tok) {
     return char_number_p(tok[0]);
 }
 
-bool tok_word_p(char *tok) {
+bool tok_word_p(const char *tok) {
     return char_word_p(tok[0]);
 }
 
-bool char_in_str_p(char c, char *str) {
+bool char_in_str_p(char c, const char *str) {
     int strlen = strnlen(str, MAX_TOKEN_LEN);
     for (int i = 0; i < strlen; i++) {
         if (str[i] == c) {
@@ -45,4 +45,11 @@ bool char_in_str_p(char c, char *str) {
         }
     }
     return false;
+}
+
+/*
+ * divisor_p - grąžina true, jei y yra x daliklis.
+ */
+bool divisor_p(long x, long y) {
+    return (x % y) == 0;
 }

@@ -75,18 +75,23 @@ void op_show_result(stack_t *stk) {
     printf("\n");
 }
 
+void op_quit(stack_t *stk) {
+    exit(EXIT_SUCCESS);
+}
+
 
 /*
  * operators - statiškas operatorių aprašymas. Paskutinis narys
  * privalo turėti pavadinimą NULL.
  */
 const operator_t operators[] = {
-    { "+", 2, &op_add },
-    { "-", 2, &op_sub },
-    { "*", 2, &op_mul },
-    { "/", 2, &op_div },
-    { "=", 0, &op_show_result },
-    { "st", 0, &op_show_stack },
+    { "+", 2, op_add },
+    { "-", 2, op_sub },
+    { "*", 2, op_mul },
+    { "/", 2, op_div },
+    { "=", 0, op_show_result },
+    { "st", 0, op_show_stack },
+    { "q", 0, op_quit },
     { NULL, 0, NULL }
 };
 
@@ -107,7 +112,7 @@ void op_call(const char* name, stack_t *stk) {
         return;
     }
 
-    unsigned long stk_len = list_length(*stk);
+    long stk_len = list_length(*stk);
     if (stk_len < op->arity) {
         e_fatal("op_call: stack underflow for %s\n", op->name);
     }

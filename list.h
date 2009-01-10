@@ -14,17 +14,17 @@
  */
 
 #pragma once
-#ifndef __list_h__
-#define __list_h__
+#ifndef list_h__
+#define list_h__
 
 #include <stdio.h>
 
-typedef struct list_t {
-    void *first;
-    struct list_t *rest;
-} list_t;
 
+#ifndef LIST_TYPES_DEFINED
+typedef struct list_t list_t;
 typedef list_t* stack_t;
+#endif
+
 
 #define LIST_END NULL
 
@@ -32,7 +32,7 @@ typedef list_t* stack_t;
 #define POPCAST(type, l) (*(type*)stack_pop(&l))
 
 #define LIST_FOREACH(iter, l)                   \
-    for (list_t *iter = (l);                      \
+    for (const list_t *iter = (l);              \
          iter != LIST_END;                      \
          list_next(&iter))
 
@@ -51,12 +51,12 @@ list_t *list_cons(void *first, list_t *rest);
  * list_first - grąžina rodyklę į cons dalelės ankstesnįjį narį
  * (sąrašo atveju - į tos ląstelės vertę).
  */
-void *list_first(list_t *l);
+void *list_first(const list_t *l);
 
 /*
  * list_setfirst - nustato ankstesnįjį narį.
  */
-void *list_rest(list_t *l);
+void *list_rest(const list_t *l);
 
 /*
  * list_rest - grąžina rodyklę į vėlesnijį narį (šąrašo atveju - į
@@ -74,7 +74,7 @@ void list_setrest(list_t *l, list_t* value);
  * paskesnįjį narį, skirta naudoti iteracijai, pavyzdžiui for ciklo
  * trečiame sakinyje.
  */
-void list_next(list_t **avar);
+void list_next(const list_t **avar);
 
 /*
  * list_free - išlaisvina visas duoto sąrašo cons ląsteles.
@@ -90,17 +90,17 @@ list_t *list_nreverse(list_t *l);
 /*
  * list_reverse - apsuka sąrašo kopiją ir ją grąžina.
  */
-list_t *list_reverse(list_t *l);
+list_t *list_reverse(const list_t *l);
 
 /*
  * list_copy - padaro sąrašo kopiją ir ją grąžina.
  */
-list_t *list_copy(list_t *l);
+list_t *list_copy(const list_t *l);
 
 /*
  * list_length - grąžina sąrašo ilgį.
  */
-unsigned long list_length(list_t *l);
+long list_length(const list_t *l);
 
 /*
  * stack_push - į steką (rodyklę į rodyklę į sąrašą) viršuje įdeda

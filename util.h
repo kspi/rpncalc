@@ -3,8 +3,8 @@
  */
 
 #pragma once
-#ifndef __util_h__
-#define __util_h__
+#ifndef util_h__
+#define util_h__
 
 
 /*
@@ -22,6 +22,11 @@
     if (!(expr))                                        \
         e_fatal("%s: assertion failed: %s", fun, name)
 
+#define EXHAUSTIVE_SWITCH                                           \
+    default:                                                        \
+    e_fatal("error: non exhaustive switch statement in %s:%d\n",    \
+            __FILE__,                                               \
+            __LINE__);
 
 /*
  * e_error - į stderr spausdina pranešimą, naudojama kaip printf.
