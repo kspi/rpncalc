@@ -102,6 +102,8 @@ list_t *list_copy(const list_t *l);
  */
 long list_length(const list_t *l);
 
+stack_t *stack_new();
+
 /*
  * stack_push - į steką (rodyklę į rodyklę į sąrašą) viršuje įdeda
  * naują narį ir nustato steko rodyklę į jį.

@@ -113,6 +113,11 @@ long list_length(const list_t *l) {
 }
 
 
+stack_t *stack_new() {
+    return malloc(sizeof(list_t*));
+}
+
+
 void stack_push(void *val, stack_t *st) {
     (*st) = list_cons(val, *st);
 }

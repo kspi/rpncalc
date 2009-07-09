@@ -51,6 +51,7 @@ DEFOP_2(op_add, result = num_add(x, y))
 DEFOP_2(op_sub, result = num_subtract(x, y))
 DEFOP_2(op_mul, result = num_multiply(x, y))
 DEFOP_2(op_div, result = num_divide(x, y))
+DEFOP_1(op_neg, result = num_negate(x))
 
 
 /*
@@ -59,24 +60,45 @@ DEFOP_2(op_div, result = num_divide(x, y))
  */
 void op_show_stack(stack_t *stk) {
     printf("stack: ");
-    LIST_FOREACH(xs, *stk) {
+    list_t *list = list_reverse(*stk);
+    LIST_FOREACH(xs, list) {
         num_print(list_first(xs));
         printf(" ");
     }
+    free(list);
     printf("\n");
 }
 
 
 /*
- * op_show_result - išveda naujausią steko reikšmę.
+ * op_show_last - išveda naujausią steko reikšmę.
  */
-void op_show_result(stack_t *stk) {
+void op_show_last(stack_t *stk) {
     num_print(list_first(*stk));
     printf("\n");
 }
 
+
 void op_quit(stack_t *stk) {
     exit(EXIT_SUCCESS);
+}
+
+
+void op_nothing(stack_t *stk) {}
+
+
+void op_drop(stack_t *stk) {
+    free(stack_pop(stk));
+}
+
+void op_dup(stack_t *stk) {
+    void *thing = list_first(*stk);
+    stack_push(num_dup(thing), stk);
+}
+
+void op_print(stack_t *stk) {
+    op_show_last(stk);
+    op_drop(stk);
 }
 
 
@@ -89,11 +111,20 @@ const operator_t operators[] = {
     { "-", 2, op_sub },
     { "*", 2, op_mul },
     { "/", 2, op_div },
-    { "=", 0, op_show_result },
+    { "neg", 1, op_neg },
+
+    { "drop", 0, op_drop },
+    { "dup", 1, op_dup },
+
+    { "=", 1, op_show_last },
+    { ".", 1, op_print },
     { "st", 0, op_show_stack },
     { "q", 0, op_quit },
+    { "", 0, op_nothing },
+
     { NULL, 0, NULL }
 };
+
 
 /*
  * op_call - pagrindinė funkcija čia. Iškviečia operatorių vardu name
@@ -102,7 +133,7 @@ const operator_t operators[] = {
 void op_call(const char* name, stack_t *stk) {
     const operator_t *op = NULL;
     for (int i = 0; operators[i].name; i++) {
-        if (strcmp(name, operators[i].name) == 0) {
+        if (strncmp(name, operators[i].name, MAX_TOKEN_LEN) == 0) {
             op = &operators[i];
             break;
         }
