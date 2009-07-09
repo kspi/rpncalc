@@ -1,6 +1,7 @@
 APP = rpncalc
 
-OBJS = main.o list.o predicates.o operators.o util.o numbers.o eval.o
+OBJS = main.o list.o predicates.o operators.o util.o numbers.o eval.o	\
+	   fraction.o
 
 CC = gcc
 CFLAGS = -g -ggdb -O0 -Wall -std=c99

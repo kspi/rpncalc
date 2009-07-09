@@ -25,9 +25,9 @@
  * ASSERT - programa nusižudo, jei expr yra false. fun ir name -
  * paskutiniai jos žodžiai.
  */
-#define ASSERT(fun, expr)                               \
-    if (!(expr))                                        \
-        e_fatal("%s: assertion failed: %s", (fun), #expr)
+#define ASSERT(expr)                                                    \
+    if (!(expr))                                                        \
+        e_fatal("error:%s:%d: assertion failed: %s", __FILE__, __LINE__, #expr)
 
 
 /*
@@ -62,6 +62,12 @@ void e_error(const char *fmt, ...);
  * e_fatal - kaip e_error bet dar ir nužudo programą.
  */
 void e_fatal(const char *fmt, ...);
+
+
+/*
+ * gcd - randa dviejų skaičių didžiausią bendrą daliklį.
+ */
+unsigned long int gcd(unsigned long int u, unsigned long int v);
 
 
 /*

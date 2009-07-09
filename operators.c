@@ -33,8 +33,8 @@ typedef struct {
         num_t *x = (num_t*)stack_pop(_stk);     \
         num_t *result;                          \
         body;                                   \
-        free(x);                                \
-        free(y);                                \
+        num_free(x);                                \
+        num_free(y);                                \
         stack_push(result, _stk);               \
     }
 
@@ -43,7 +43,7 @@ typedef struct {
         num_t *x = (num_t*)stack_pop(_stk);     \
         num_t *result;                          \
         body;                                   \
-        free(x);                                \
+        num_free(x);                                \
         stack_push(result, _stk);               \
     }
 
@@ -65,7 +65,7 @@ void op_show_stack(stack_t *stk) {
         num_print(list_first(xs));
         printf(" ");
     }
-    free(list);
+    list_free(list);
     printf("\n");
 }
 
@@ -88,12 +88,12 @@ void op_nothing(stack_t *stk) {}
 
 
 void op_drop(stack_t *stk) {
-    free(stack_pop(stk));
+    num_free(stack_pop(stk));
 }
 
 void op_dup(stack_t *stk) {
     void *thing = list_first(*stk);
-    stack_push(num_dup(thing), stk);
+    stack_push(num_copy(thing), stk);
 }
 
 void op_print(stack_t *stk) {
