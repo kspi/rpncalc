@@ -2,6 +2,8 @@
 #ifndef fraction_h__
 #define fraction_h__
 
+#include <stdio.h>
+
 #ifndef FRACTION_TYPES_DEFINED
 typedef int fraction_integer_t;
 typedef struct fraction_t fraction_t;
@@ -40,6 +42,13 @@ fraction_t *fraction_copy(const fraction_t *frac);
 
 
 /*
+ * Vardiklis ir skaitiklis:
+ */
+fraction_integer_t fraction_numerator(fraction_t *frac);
+fraction_integer_t fraction_denominator(fraction_t *frac);
+
+
+/*
  * Aritmetika:
  */
 fraction_t *fraction_add(const fraction_t *x, const fraction_t *y);
@@ -47,5 +56,12 @@ fraction_t *fraction_negate(const fraction_t *frac);
 fraction_t *fraction_subtract(const fraction_t *x, const fraction_t *y);
 fraction_t *fraction_multiply(const fraction_t *x, const fraction_t *y);
 fraction_t *fraction_divide(const fraction_t *x, const fraction_t *y);
+
+
+/*
+ * Vertimai:
+ */
+double fraction_to_double(const fraction_t *frac);
+long fraction_to_long(const fraction_t *frac);
 
 #endif

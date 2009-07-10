@@ -22,7 +22,6 @@
 #include "predicates.h"
 #include "list.h"
 
-#include "fraction.h"           /* TODO: remove */
 
 
 int main(int argc, char **argv)
@@ -30,10 +29,6 @@ int main(int argc, char **argv)
     char *line = NULL;
     stack_t *stk = stack_new();
 
-    
-    fraction_fprint(stdout, fraction_add(fraction_read("-1/7"), fraction_read("2/4")));
-
-    
     if (argc > 1) {
         while (argc > 1) {
             FILE *input;

@@ -47,6 +47,7 @@ fraction_t *fraction_new(fraction_integer_t numerator, fraction_integer_t denomi
     return frac;
 }
 
+
 void fraction_free(fraction_t *frac) {
     free(frac);
 }
@@ -79,6 +80,16 @@ fraction_t *fraction_copy(const fraction_t *frac) {
 }
 
 
+fraction_integer_t fraction_numerator(fraction_t *frac) {
+    return frac->numerator;
+}
+
+
+fraction_integer_t fraction_denominator(fraction_t *frac) {
+    return frac->denominator;
+}
+
+
 fraction_t *fraction_add(const fraction_t *x, const fraction_t *y) {
     fraction_integer_t nnum, nden;
     nnum = x->numerator * y->denominator + y->numerator * x->denominator;
@@ -106,7 +117,19 @@ fraction_t *fraction_multiply(const fraction_t *x, const fraction_t *y) {
                         x->denominator * y->denominator);
 }
 
+
 fraction_t *fraction_divide(const fraction_t *x, const fraction_t *y) {
     return fraction_new(x->numerator * y->denominator,
                         x->denominator * y->numerator);
 }
+
+
+double fraction_to_double(const fraction_t *frac) {
+    return ((double)frac->numerator) / ((double)frac->denominator);
+}
+
+
+long fraction_to_long(const fraction_t *frac) {
+    return ((long)frac->numerator) / ((long)frac->denominator);
+}
+
