@@ -156,7 +156,9 @@ void op_help(stack_t *stk) {
  * op_call - pagrindinė funkcija čia. Iškviečia operatorių vardu name
  * su steku stk.
  */
-void op_call(const char* name, stack_t *stk) {
+void op_call(const char *name, stack_t *stk) {
+    if (*name == '\0') return;
+    
     const operator_t *op = NULL;
     for (int i = 0; operators[i].name; i++) {
         if (strncmp(name, operators[i].name, MAX_TOKEN_LEN) == 0) {
