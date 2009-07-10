@@ -1,8 +1,7 @@
 APP = rpncalc
 VERSION = 0.1
 
-CC = gcc
-CFLAGS = -g -ggdb -O0 -Wall -std=c99
+CFLAGS = -g -ggdb -O0 -Wall -std=c99 -DRPNCALC_VERSION='\"$(VERSION)\"'
 LIBS = -lm -lreadline
 
 DISTDIRS = \
@@ -38,7 +37,7 @@ OBJS = main.o list.o predicates.o operators.o util.o numbers.o eval.o	\
 all: $(APP)
 
 $(APP): src/$(APP)
-	ln -s src/$(APP) $(APP)
+	ln -sf src/$(APP) $(APP)
 
 .PHONY: ${patsubst %,src/%,$(OBJS)}
 

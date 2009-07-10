@@ -6,6 +6,8 @@
 #ifndef util_h__
 #define util_h__
 
+#include <stdbool.h>
+
 #define RPNCALC_DEBUG
 
 /*
@@ -62,6 +64,13 @@ void e_error(const char *fmt, ...);
  * e_fatal - kaip e_error bet dar ir nužudo programą.
  */
 void e_fatal(const char *fmt, ...);
+
+
+/*
+ * integer_sqrt - grąžina true, jei iš x traukiasi šaknis. Tada out
+ * nustato į tos šaknies reikšmę.
+ */
+bool integer_sqrt(long int x, long int *out);
 
 
 /*

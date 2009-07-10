@@ -52,6 +52,7 @@ DEFOP_2(op_sub, result = num_subtract(x, y))
 DEFOP_2(op_mul, result = num_multiply(x, y))
 DEFOP_2(op_div, result = num_divide(x, y))
 DEFOP_1(op_neg, result = num_negate(x))
+DEFOP_1(op_sqrt, result = num_sqrt(x))
 
 
 /*
@@ -112,13 +113,14 @@ const operator_t operators[] = {
     { "*", 2, op_mul },
     { "/", 2, op_div },
     { "neg", 1, op_neg },
+    { "sqrt", 1, op_sqrt },
 
     { "drop", 0, op_drop },
     { "dup", 1, op_dup },
 
     { "=", 1, op_show_last },
     { ".", 1, op_print },
-    { "st", 0, op_show_stack },
+    { "stack", 0, op_show_stack },
     { "q", 0, op_quit },
     { "", 0, op_nothing },
 

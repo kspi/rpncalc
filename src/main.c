@@ -24,12 +24,40 @@
 
 
 
+void print_usage(const char *name) {
+    printf(
+        "Naudojimas: \n"
+        "    %s [BYLA1] [BYLA2] ...\n"
+        "    %s --help\n"
+        "    %s --version\n"
+        "\n"
+        "BYLA gali būti -, tada skaitoma iš stdin. Jei neduota nei viena byla,\n"
+        "tai paleidžiamas interaktyvus režimas.\n",
+        name, name, name);
+    exit(0);
+}
+
+
+void print_version() {
+    printf("rpncalc " RPNCALC_VERSION "\n");
+    exit(0);
+}
+
+
 int main(int argc, char **argv)
 {
     char *line = NULL;
     stack_t *stk = stack_new();
 
     if (argc > 1) {
+        if (argc == 2) {
+            if (strcmp("--help", argv[1]) == 0) {
+                print_usage(argv[0]);
+            } else if (strcmp("--version", argv[1]) == 0) {
+                print_version();
+            }
+        }
+        
         while (argc > 1) {
             FILE *input;
 
@@ -59,6 +87,7 @@ int main(int argc, char **argv)
                 }
                 eval(line, stk);
                 add_history(line);
+                eval("stack", stk);
                 free(line);
             }
         } else {

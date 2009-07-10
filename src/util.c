@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
-
+#include <stdbool.h>
+#include <math.h>
 
 void e_error(const char *fmt, ...) {
     va_list args;
@@ -20,6 +21,16 @@ void e_fatal(const char *fmt, ...) {
     va_end(args);
 
     exit(EXIT_FAILURE);
+}
+
+
+bool integer_sqrt(long int i, long int *out) {
+    if ((((long int)sqrt(i))*((long int)sqrt(i))) == i) {
+        *out = (long int)sqrt(i);
+        return true;
+    } else {
+        return false;
+    }    
 }
 
 

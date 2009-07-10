@@ -23,7 +23,7 @@ typedef struct {
     union {
         num_integer_t integer;
         num_real_t real;
-        num_fraction_t *fraction;
+        const num_fraction_t *fraction;
     } value;
 } num_t;
 
@@ -43,7 +43,7 @@ void num_set_real(num_t *num, num_real_t val) {
 }
 
 
-void num_set_fraction(num_t *num, num_fraction_t *val) {
+void num_set_fraction(num_t *num, const num_fraction_t *val) {
     if (fraction_denominator(val) == 1) {
         num_set_integer(num, fraction_numerator(val));
     } else {
@@ -67,7 +67,7 @@ num_t *num_new_real(const num_real_t val) {
 }
 
 
-num_t *num_new_fraction(num_fraction_t *val) {
+num_t *num_new_fraction(const num_fraction_t *val) {
     num_t *num = malloc(sizeof(num_t));
     num_set_fraction(num, val);
     return num;
@@ -91,7 +91,7 @@ bool num_typep_fraction(const num_t *num) {
 
 void num_free(num_t *num) {
     if (num_typep_fraction(num)) {
-        fraction_free(num->value.fraction);
+        fraction_free((fraction_t *)num->value.fraction);
     }
     free(num);
 }
@@ -109,7 +109,7 @@ num_real_t num_get_real(const num_t *num) {
 }
 
 
-num_fraction_t *num_get_fraction(const num_t *num) {
+const num_fraction_t *num_get_fraction(const num_t *num) {
     ASSERT(num_typep_fraction(num));
     return num->value.fraction;
 }
@@ -145,7 +145,7 @@ num_real_t num_coerce_real(const num_t *num) {
 }
 
 
-num_fraction_t *num_coerce_fraction(const num_t *num) {
+const num_fraction_t *num_coerce_fraction(const num_t *num) {
     switch (num->type) {
     case NUM_INTEGER:
         return fraction_new(num->value.integer, 1);
@@ -207,6 +207,38 @@ num_t *num_copy(const num_t *x) {
     EXHAUSTIVE_FUNCTION
 }
 
+
+num_t *num_sqrt(const num_t *x) {
+    num_integer_t i;
+    num_fraction_t *f;
+    
+    switch(x->type) {
+    case NUM_INTEGER:
+        i = num_get_integer(x);
+        if (integer_sqrt(i, &i)) {
+            return num_new_integer(i);
+        } else {
+            return num_new_real(sqrt(i));
+        }
+        
+    case NUM_REAL:
+        return num_new_real(sqrt(num_get_real(x)));
+        
+    case NUM_FRACTION:
+        f = fraction_sqrt(num_get_fraction(x));
+        if (f) {
+            return num_new_fraction(f);
+        } else {
+            return num_new_real(sqrt(num_coerce_real(x)));
+        }
+        
+    EXHAUSTIVE_SWITCH
+    }
+    EXHAUSTIVE_FUNCTION
+    
+}
+
+
 num_t *num_add(const num_t *x, const num_t *y) {
     if (num_typep_real(x) || num_typep_real(y)) {
         return num_new_real(num_coerce_real(x) + num_coerce_real(y));
@@ -218,22 +250,21 @@ num_t *num_add(const num_t *x, const num_t *y) {
     }
 }
 
+
 num_t *num_negate(const num_t *x) {
     switch(x->type) {
     case NUM_INTEGER:
         return num_new_integer(-num_get_integer(x));
-        break;
     case NUM_REAL:
         return num_new_real(-num_get_real(x));
-        break;
     case NUM_FRACTION:
         return num_new_fraction(fraction_negate(num_get_fraction(x)));
-        break;
         
     EXHAUSTIVE_SWITCH
     }
     EXHAUSTIVE_FUNCTION
 }
+
 
 num_t *num_subtract(const num_t *x, const num_t *y) {
     num_t *minus_y = num_negate(y);
@@ -241,6 +272,7 @@ num_t *num_subtract(const num_t *x, const num_t *y) {
     num_free(minus_y);
     return result;
 }
+
 
 num_t *num_multiply(const num_t *x, const num_t *y) {
     if (num_typep_real(x) || num_typep_real(y)) {
@@ -253,12 +285,14 @@ num_t *num_multiply(const num_t *x, const num_t *y) {
     }
 }
 
+
 bool num_integer_divisor_p(const num_t *x, const num_t *y) {
     return
         num_typep_integer(x) &&
         num_typep_integer(x) &&
         !divisor_p(num_get_integer(x), num_get_integer(y));
 }
+
 
 num_t *num_divide(const num_t *x, const num_t *y) {
     if (num_typep_real(x)
@@ -273,3 +307,4 @@ num_t *num_divide(const num_t *x, const num_t *y) {
         return num_new_integer(num_get_integer(x) / num_get_integer(y));
     }
 }
+

@@ -7,9 +7,7 @@
 #ifndef predicates_h__
 #define predicates_h__
 
-typedef int bool;
-#define true 1
-#define false 0
+#include <stdbool.h>
 
 bool char_number_p(char c);
 bool char_word_p(char c);

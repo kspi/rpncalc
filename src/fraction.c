@@ -6,14 +6,6 @@
 #include "util.h"
 
 
-typedef long fraction_integer_t;
-
-typedef struct {
-    fraction_integer_t numerator;
-    fraction_integer_t denominator;
-} fraction_t;
-
-#define FRACTION_TYPES_DEFINED
 #include "fraction.h"
 
 
@@ -58,10 +50,9 @@ fraction_t *fraction_read(const char *str) {
     fraction_integer_t num, den;
 
     ASSERT(str);
-    ASSERT(char_in_str_p('/', str));
-
     num = strtol(str, &endptr, 10);
-    
+
+    ASSERT(endptr);
     ASSERT(*endptr == '/');
     endptr++;
     den = strtol(endptr, NULL, 10);
@@ -80,13 +71,27 @@ fraction_t *fraction_copy(const fraction_t *frac) {
 }
 
 
-fraction_integer_t fraction_numerator(fraction_t *frac) {
+fraction_integer_t fraction_numerator(const fraction_t *frac) {
     return frac->numerator;
 }
 
 
-fraction_integer_t fraction_denominator(fraction_t *frac) {
+fraction_integer_t fraction_denominator(const fraction_t *frac) {
     return frac->denominator;
+}
+
+
+fraction_t *fraction_sqrt(const fraction_t *x) {
+    fraction_integer_t num, den;
+
+    num = x->numerator;
+    den = x->denominator;
+
+    if (integer_sqrt(num, &num) && integer_sqrt(den, &den)) {
+        return fraction_new(num, den);
+    } else {
+        return NULL;
+    }
 }
 
 

@@ -79,6 +79,7 @@ num_t *num_copy(const num_t *x);
 /*
  * Matematinės operacijos
  */
+num_t *num_sqrt(const num_t *x);
 num_t *num_add(const num_t *x, const num_t *y);
 num_t *num_negate(const num_t *x);
 num_t *num_subtract(const num_t *x, const num_t *y);
