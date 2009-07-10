@@ -17,6 +17,7 @@ typedef struct {
     char *name;
     int arity;
     operator_fun_t fun;
+    const char *description;
 } operator_t;
 
 
@@ -84,9 +85,12 @@ void op_quit(stack_t *stk) {
     exit(EXIT_SUCCESS);
 }
 
-
-void op_nothing(stack_t *stk) {}
-
+void op_swap(stack_t *stk) {
+    void *a = stack_pop(stk);
+    void *b = stack_pop(stk);
+    stack_push(a, stk);
+    stack_push(b, stk);
+}
 
 void op_drop(stack_t *stk) {
     num_free(stack_pop(stk));
@@ -102,30 +106,50 @@ void op_print(stack_t *stk) {
     op_drop(stk);
 }
 
+void op_help(stack_t *stk);
+
 
 /*
  * operators - statiškas operatorių aprašymas. Paskutinis narys
  * privalo turėti pavadinimą NULL.
  */
 const operator_t operators[] = {
-    { "+", 2, op_add },
-    { "-", 2, op_sub },
-    { "*", 2, op_mul },
-    { "/", 2, op_div },
-    { "neg", 1, op_neg },
-    { "sqrt", 1, op_sqrt },
+    { "+",      2, op_add, "Sudeda skaičius." },
+    { "-",      2, op_sub, "Atima skaičius." },
+    { "*",      2, op_mul, "Sudaugina skaičius." },
+    { "/",      2, op_div, "Padalina skaičius." },
+    { "neg",    1, op_neg, "Pakeičia skaičiaus ženklą." },
+    { "sqrt",   1, op_sqrt, "Ištraukia šaknį.\n" },
 
-    { "drop", 0, op_drop },
-    { "dup", 1, op_dup },
+    { "swap",   2, op_swap, "Sukeičia du viršutinius steko narius vietomis." },
+    { "drop",   1, op_drop, "Išima viršutinį steko narį." },
+    { "dup",    1, op_dup, "Nukopijuoja viršutinį steko narį." },
+    { ".",      1, op_print, "Atspausdina viršutinį steko narį.\n" },
 
-    { "=", 1, op_show_last },
-    { ".", 1, op_print },
-    { "stack", 0, op_show_stack },
-    { "q", 0, op_quit },
-    { "", 0, op_nothing },
+    { "help",   0, op_help, "Parodo operatorių sąrašą su aprašymais." },
+    { "stack",  0, op_show_stack, "Parodo steko turinį." },
+    { "q",      0, op_quit, "Išjungia programą.\n" },
 
-    { NULL, 0, NULL }
+    { NULL,     0, NULL }
 };
+
+
+void op_help(stack_t *stk) {
+    printf("Operatoriai:\n");
+    for (int i = 0; operators[i].name; i++) {
+        printf("    %s", operators[i].name);
+
+        if (operators[i].arity > 0) {
+            printf(" (%d)", operators[i].arity);
+        }
+
+        if (operators[i].description) {
+            printf(" - %s", operators[i].description);
+        }
+
+        printf("\n");
+    }    
+}
 
 
 /*
