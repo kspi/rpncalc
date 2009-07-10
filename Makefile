@@ -27,6 +27,7 @@ DISTFILES = \
 	src/util.h \
 	src/Makefile \
 	Makefile \
+	README \
 	$(APP)
 
 OBJS = main.o list.o predicates.o operators.o util.o numbers.o eval.o	\
