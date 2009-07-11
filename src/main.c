@@ -44,6 +44,8 @@ void print_version() {
 }
 
 
+const char *stdin_filename = "<stdin>";
+
 int main(int argc, char **argv)
 {
     char *line = NULL;
@@ -60,10 +62,13 @@ int main(int argc, char **argv)
         
         while (argc > 1) {
             FILE *input;
+            char *filename;
 
             if (strncmp(argv[1], "-", 2) == 0) {
                 input = stdin;
+                filename = (char *)stdin_filename;
             } else {
+                filename = argv[1];
                 input = fopen(argv[1], "r");
             }
             
@@ -72,7 +77,7 @@ int main(int argc, char **argv)
                         argv[1],
                         strerror(errno));
             }
-            eval_file(input, stk);
+            eval_file(input, filename, stk);
             fclose(input);
             
             argc--;
@@ -91,7 +96,7 @@ int main(int argc, char **argv)
                 free(line);
             }
         } else {
-            eval_file(stdin, stk);
+            eval_file(stdin, stdin_filename, stk);
         }
     }
         

@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "list.h"
 #include "operators.h"
@@ -156,8 +157,10 @@ void op_help(stack_t *stk) {
  * op_call - pagrindinė funkcija čia. Iškviečia operatorių vardu name
  * su steku stk.
  */
-void op_call(const char *name, stack_t *stk) {
-    if (*name == '\0') return;
+bool op_call(const char *name, stack_t *stk) {
+    if (*name == '\0') {
+        e_fatal("error: op_call: empty operator");
+    }
     
     const operator_t *op = NULL;
     for (int i = 0; operators[i].name; i++) {
@@ -168,13 +171,15 @@ void op_call(const char *name, stack_t *stk) {
     }
     if (!op) {
         e_error("op_call: bad operator: '%s'\n", name);
-        return;
+        return false;
     }
 
     long stk_len = list_length(*stk);
     if (stk_len < op->arity) {
-        e_fatal("op_call: stack underflow for %s\n", op->name);
+        e_error("op_call: stack underflow for %s\n", op->name);
+        return false;
     }
 
     (*op->fun)(stk);
+    return true;
 }

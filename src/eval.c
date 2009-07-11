@@ -31,7 +31,12 @@ char *read_token(char **str) {
             /* end of input */
             
             buf[buf_i] = '\0';
-            return buf;
+            if (*buf == '\0') {
+                free(buf);
+                return NULL;
+            } else {
+                return buf;
+            }
         } else {
             /* whitespace */
             
@@ -45,29 +50,41 @@ char *read_token(char **str) {
 }
 
 
-void eval(char *str, stack_t *stk) {
+bool eval(char *str, stack_t *stk) {
     char *tok = NULL;
 
     while (*str != '\0') {
         tok = read_token(&str);
+        if (!tok) break;
+        
         if (tok_number_p(tok)) {
             stack_push(num_from_str(tok), stk);
         } else {
-            op_call(tok, stk);
+            if (!op_call(tok, stk)) {
+                free(tok);
+                return false;
+            }
         }
         free(tok);
     }
+
+    return true;
 }
 
-void eval_file(FILE *file, stack_t *stk) {
+void eval_file(FILE *file, const char *filename, stack_t *stk) {
     char *buf = malloc(MAX_LINE_LEN);
     char *line;
+    int linenr = 1;
 
     while (true) {
         line = fgets(buf, MAX_LINE_LEN, file);
         if (!line) break;
         
-        eval(line, stk);
+        if (!eval(line, stk)) {
+            e_fatal("error in input at %s:%d\n", filename, linenr);
+        }
+        
+        linenr++;
     }
 
     free(buf);
