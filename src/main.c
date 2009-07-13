@@ -21,6 +21,7 @@
 #include "eval.h"
 #include "predicates.h"
 #include "list.h"
+#include "numbers.h"
 
 
 
@@ -34,13 +35,17 @@ void print_usage(const char *name) {
         "BYLA gali būti -, tada skaitoma iš stdin. Jei neduota nei viena byla,\n"
         "tai paleidžiamas interaktyvus režimas.\n",
         name, name, name);
-    exit(0);
 }
 
 
 void print_version() {
     printf("rpncalc " RPNCALC_VERSION "\n");
-    exit(0);
+}
+
+
+void print_intro() {
+    print_version();
+    printf("'help' išveda operatorių sąrašą.\n\n");
 }
 
 
@@ -55,8 +60,13 @@ int main(int argc, char **argv)
         if (argc == 2) {
             if (strcmp("--help", argv[1]) == 0) {
                 print_usage(argv[0]);
+                exit(0);
             } else if (strcmp("--version", argv[1]) == 0) {
                 print_version();
+                exit(0);
+            } else if (strcmp("--", argv[1]) == 0) {
+                argv++;
+                argc--;
             }
         }
         
@@ -85,6 +95,7 @@ int main(int argc, char **argv)
         }
     } else {
         if (isatty(0)) {        /* 0 - fd of stdin */
+            print_intro();
             while(true) {
                 line = readline("> ");
                 if (line == NULL) {
@@ -101,10 +112,7 @@ int main(int argc, char **argv)
     }
         
     /* CLEANUP */
-    LIST_FOREACH(xs, *stk) {
-        free(list_first(xs));
-    }
-    list_free(*stk);
+    eval("clear", stk);
     free(stk);
 
     return EXIT_SUCCESS;

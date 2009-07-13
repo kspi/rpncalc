@@ -29,23 +29,23 @@ typedef struct {
  * result arba {}-blokas.
  */
 
-#define DEFOP_2(op_name, body)                  \
-    void op_name(stack_t *_stk) {               \
-        num_t *y = (num_t*)stack_pop(_stk);     \
-        num_t *x = (num_t*)stack_pop(_stk);     \
-        num_t *result;                          \
-        body;                                   \
+#define DEFOP_2(op_name, body)                      \
+    static void op_name(stack_t *_stk) {            \
+        num_t *y = (num_t*)stack_pop(_stk);         \
+        num_t *x = (num_t*)stack_pop(_stk);         \
+        num_t *result;                              \
+        body;                                       \
         num_free(x);                                \
         num_free(y);                                \
-        stack_push(result, _stk);               \
+        stack_push(result, _stk);                   \
     }
 
 #define DEFOP_1(op_name, body)                  \
-    void op_name(stack_t *_stk) {               \
+    static void op_name(stack_t *_stk) {        \
         num_t *x = (num_t*)stack_pop(_stk);     \
         num_t *result;                          \
         body;                                   \
-        num_free(x);                                \
+        num_free(x);                            \
         stack_push(result, _stk);               \
     }
 
@@ -61,7 +61,7 @@ DEFOP_1(op_sqrt, result = num_sqrt(x))
  * op_show_stack - išveda steko reikšmes nuo naujausios iki
  * seniausios.
  */
-void op_show_stack(stack_t *stk) {
+static void op_show_stack(stack_t *stk) {
     printf("stack: ");
     list_t *list = list_reverse(*stk);
     LIST_FOREACH(xs, list) {
@@ -76,38 +76,44 @@ void op_show_stack(stack_t *stk) {
 /*
  * op_show_last - išveda naujausią steko reikšmę.
  */
-void op_show_last(stack_t *stk) {
+static void op_show_last(stack_t *stk) {
     num_print(list_first(*stk));
     printf("\n");
 }
 
 
-void op_quit(stack_t *stk) {
+static void op_quit(stack_t *stk) {
     exit(EXIT_SUCCESS);
 }
 
-void op_swap(stack_t *stk) {
+static void op_swap(stack_t *stk) {
     void *a = stack_pop(stk);
     void *b = stack_pop(stk);
     stack_push(a, stk);
     stack_push(b, stk);
 }
 
-void op_drop(stack_t *stk) {
+static void op_drop(stack_t *stk) {
     num_free(stack_pop(stk));
 }
 
-void op_dup(stack_t *stk) {
+static void op_dup(stack_t *stk) {
     void *thing = list_first(*stk);
     stack_push(num_copy(thing), stk);
 }
 
-void op_print(stack_t *stk) {
+static void op_print(stack_t *stk) {
     op_show_last(stk);
     op_drop(stk);
 }
 
-void op_help(stack_t *stk);
+static void op_clear(stack_t *stk) {
+    while (*stk) {
+        op_drop(stk);
+    };
+}
+
+static void op_help(stack_t *stk);
 
 
 /*
@@ -126,6 +132,7 @@ const operator_t operators[] = {
     { "drop",   1, op_drop, "Išima viršutinį steko narį." },
     { "dup",    1, op_dup, "Nukopijuoja viršutinį steko narį." },
     { ".",      1, op_print, "Atspausdina viršutinį steko narį.\n" },
+    { "clear",  -1, op_clear, "Ištuština steką." },
 
     { "help",   0, op_help, "Parodo operatorių sąrašą su aprašymais." },
     { "stack",  0, op_show_stack, "Parodo steko turinį." },
@@ -135,8 +142,8 @@ const operator_t operators[] = {
 };
 
 
-void op_help(stack_t *stk) {
-    printf("Operatoriai:\n");
+static void op_help(stack_t *stk) {
+    printf("\nOperatoriai:\n");
     for (int i = 0; operators[i].name; i++) {
         printf("    %s", operators[i].name);
 

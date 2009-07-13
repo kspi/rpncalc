@@ -1,53 +1,32 @@
-APP = rpncalc
-VERSION = 0.1
-
-CFLAGS = -g -ggdb -O0 -Wall -std=c99 -DRPNCALC_VERSION='\"$(VERSION)\"'
-LIBS = -lm -lreadline
-
-DISTDIRS = \
-	src
-
-DISTFILES = \
-	src/eval.c \
-	src/eval.h \
-	src/fraction.c \
-	src/fraction.h \
-	src/frap.c \
-	src/frap.h \
-	src/list.c \
-	src/list.h \
-	src/main.c \
-	src/numbers.c \
-	src/numbers.h \
-	src/operators.c \
-	src/operators.h \
-	src/predicates.c \
-	src/predicates.h \
-	src/util.c \
-	src/util.h \
-	src/Makefile \
-	Makefile \
-	README \
-	$(APP)
-
-OBJS = main.o list.o predicates.o operators.o util.o numbers.o eval.o	\
-	   fraction.o frap.o
+include config.mk
 
 .PHONY: all clean dist
 
 all: $(APP)
 
-$(APP): src/$(APP)
-	ln -sf src/$(APP) $(APP)
+$(APP): depend.mk build $(OBJS)
+	@echo "    LD  $@"
+	@$(CC) $(LIBS) -o $(APP) $(OBJS)
 
-.PHONY: ${patsubst %,src/%,$(OBJS)}
+build/%.o: src/%.c
+	@echo "    CC  $@"
+	@$(CC) $(CFLAGS) -c -o $@ $(patsubst build/%.o,src/%.c,$@)
 
-src/$(APP): ${patsubst %,src/%,$(OBJS)}
-	make -Csrc $(APP) APP="$(APP)" CC="$(CC)" CFLAGS="$(CFLAGS)" LIBS="$(LIBS)" OBJS="$(OBJS)"
+build:
+	@echo "    MKDIR $@"
+	@mkdir -p $@
+
+depend.mk: $(SOURCES) $(INCLUDES)
+# the -M switch probably only works with gcc
+	@echo "    DEPEND"
+	@$(CC) $(CFLAGS) -M $(SOURCES) $(INCLUDES) \
+		| sed -r 's,^(.*\.o:),build/\1,' > depend.mk
 
 clean:
 	rm -f $(APP)
-	make -Csrc clean APP="$(APP)" OBJS="$(OBJS)"
+	rm -f src/$(APP) $(OBJS)
+	rm -rf build
+	rm -f depend.mk
 	rm -rf dist
 
 dist: dist/$(APP)-$(VERSION).tar
@@ -61,3 +40,5 @@ dist/$(APP)-$(VERSION).tar: $(DISTFILES)
 	make -Cdist/$(APP)-$(VERSION) clean
 	cd dist && tar -czvf $(APP)-$(VERSION).tar.gz $(APP)-$(VERSION)
 	rm -rf dist/$(APP)-$(VERSION)
+
+include depend.mk
