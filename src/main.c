@@ -49,6 +49,29 @@ void print_intro() {
 }
 
 
+#ifdef HISTORY
+char *hist_filename = NULL;
+
+void hist_read() {
+    if (!hist_filename) {
+        hist_filename = malloc(255);
+        snprintf(hist_filename, 254, "%s/.rpncalc_history", getenv("HOME"));
+    }
+    read_history(hist_filename);
+}
+
+void hist_write() {
+    if (hist_filename) {
+        write_history(hist_filename);
+        free(hist_filename);
+    }
+}
+#else
+void hist_read() {}
+void hist_write() {}
+#endif
+
+
 const char *stdin_filename = "<stdin>";
 
 int main(int argc, char **argv)
@@ -96,6 +119,8 @@ int main(int argc, char **argv)
     } else {
         if (isatty(0)) {        /* 0 - fd of stdin */
             print_intro();
+            hist_read();
+            atexit(hist_write);
             while(true) {
                 line = readline("> ");
                 if (line == NULL) {

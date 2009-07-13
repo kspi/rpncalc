@@ -1,10 +1,21 @@
+### Compile-time configuration.
+
+# Possible compilation options to add to DEFS:
+#   -DHISTORY - writes interactive history to ~/.rpncalc_history
+# 
+DEFS = -DHISTORY
+
+CFLAGS = -g -ggdb -O0 -Wall -std=c99
+LIBS = -lm -lreadline
+
+
+
+### The rest shouldn't be modified.
+
 APP = rpncalc
 VERSION = 0.1
 
-
-CFLAGS = -g -ggdb -O0 -Wall -std=c99 -DRPNCALC_VERSION='"$(VERSION)"'
-LIBS = -lm -lreadline
-
+CFLAGS := $(CFLAGS) -DRPNCALC_VERSION='"$(VERSION)"' $(DEFS)
 
 HEADERS = \
 	src/eval.h \
@@ -38,5 +49,4 @@ DISTFILES = \
 	$(HEADERS) \
 	Makefile \
 	config.mk \
-	README \
-	$(APP)
+	README
