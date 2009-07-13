@@ -28,13 +28,14 @@
 void print_usage(const char *name) {
     printf(
         "Naudojimas: \n"
-        "    %s [BYLA1] [BYLA2] ...\n"
+        "    %s [--] BYLA1 [BYLA2] ...\n"
+        "    %s --eval REIŠKINYS\n"
         "    %s --help\n"
         "    %s --version\n"
         "\n"
         "BYLA gali būti -, tada skaitoma iš stdin. Jei neduota nei viena byla,\n"
         "tai paleidžiamas interaktyvus režimas.\n",
-        name, name, name);
+        name, name, name, name);
 }
 
 
@@ -80,19 +81,22 @@ int main(int argc, char **argv)
     stack_t *stk = stack_new();
 
     if (argc > 1) {
-        if (argc == 2) {
-            if (strcmp("--help", argv[1]) == 0) {
-                print_usage(argv[0]);
-                exit(0);
-            } else if (strcmp("--version", argv[1]) == 0) {
-                print_version();
-                exit(0);
-            } else if (strcmp("--", argv[1]) == 0) {
-                argv++;
-                argc--;
-            }
+        if (strcmp("--help", argv[1]) == 0) {
+            print_usage(argv[0]);
+            exit(0);
+        } else if (strcmp("--version", argv[1]) == 0) {
+            print_version();
+            exit(0);
+        } else if (strcmp("--eval", argv[1]) == 0) {
+            eval(argv[2], stk);
+            exit(0);
+        } else if (strcmp("--", argv[1]) == 0) {
+            argv++;
+            argc--;
         }
-        
+    }
+    
+    if (argc > 1) {
         while (argc > 1) {
             FILE *input;
             char *filename;
