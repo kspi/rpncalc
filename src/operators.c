@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <math.h>
 
 #include "list.h"
 #include "operators.h"
@@ -55,6 +56,35 @@ DEFOP_2(op_mul, result = num_multiply(x, y))
 DEFOP_2(op_div, result = num_divide(x, y))
 DEFOP_1(op_neg, result = num_negate(x))
 DEFOP_1(op_sqrt, result = num_sqrt(x))
+
+
+
+/* real_ops.def faile surašyti su double reikšmėmis dirbančių
+ * operatorių apibrėžimai op1 ir op2 makrokomandomis. Čia jie
+ * paverčiami funkcjiomis.
+ */
+#define op1(name)                                  \
+    static void op_##name (stack_t *_stk) {        \
+        num_t *x = (num_t*)stack_pop(_stk);        \
+        num_real_t xr = num_coerce_real(x);        \
+        num_free(x);                               \
+        num_t *result = num_new_real(name(xr));    \
+        stack_push(result, _stk);                  \
+    }
+#define op2(name)                                   \
+    static void op_##name (stack_t *_stk) {         \
+        num_t *x = (num_t*)stack_pop(_stk);         \
+        num_real_t xr = num_coerce_real(x);         \
+        num_free(x);                                \
+        num_t *y = (num_t*)stack_pop(_stk);         \
+        num_real_t yr = num_coerce_real(y);         \
+        num_free(y);                                \
+        num_t *result = num_new_real(name(yr, xr)); \
+        stack_push(result, _stk);                   \
+    }
+#include "real_ops.def"
+#undef op1
+#undef op2
 
 
 /*
@@ -120,32 +150,49 @@ static void op_help(stack_t *stk);
  * operators - statiškas operatorių aprašymas. Paskutinis narys
  * privalo turėti pavadinimą NULL.
  */
+#define OP_SEPARATOR { "\0" },
 const operator_t operators[] = {
     { "+",      2, op_add, "Sudeda skaičius." },
     { "-",      2, op_sub, "Atima skaičius." },
     { "*",      2, op_mul, "Sudaugina skaičius." },
     { "/",      2, op_div, "Padalina skaičius." },
     { "neg",    1, op_neg, "Pakeičia skaičiaus ženklą." },
-    { "sqrt",   1, op_sqrt, "Ištraukia šaknį.\n" },
+    { "sqrt",   1, op_sqrt, "Ištraukia šaknį." },
+
+    OP_SEPARATOR
+
+#define op1(fun) { #fun, 1, op_##fun, NULL },
+#define op2(fun) { #fun, 2, op_##fun, NULL },
+#include "real_ops.def"
+#undef op1
+#undef op2
+    
+    OP_SEPARATOR
 
     { "swap",   2, op_swap, "Sukeičia du viršutinius steko narius vietomis." },
     { "drop",   1, op_drop, "Išima viršutinį steko narį." },
     { "dup",    1, op_dup, "Nukopijuoja viršutinį steko narį." },
-    { ".",      1, op_print, "Atspausdina viršutinį steko narį.\n" },
+    { ".",      1, op_print, "Atspausdina viršutinį steko narį." },
     { "clear",  -1, op_clear, "Ištuština steką." },
+
+    OP_SEPARATOR
 
     { "help",   0, op_help, "Parodo operatorių sąrašą su aprašymais." },
     { "stack",  0, op_show_stack, "Parodo steko turinį." },
-    { "q",      0, op_quit, "Išjungia programą.\n" },
+    { "q",      0, op_quit, "Išjungia programą." },
 
-    { NULL,     0, NULL }
+    OP_SEPARATOR
+
+    { NULL }
 };
 
 
 static void op_help(stack_t *stk) {
     printf("\nOperatoriai:\n");
     for (int i = 0; operators[i].name; i++) {
-        printf("    %s", operators[i].name);
+        if (*operators[i].name != '\0') {
+            printf("    %s", operators[i].name);
+        }
 
         if (operators[i].arity > 0) {
             printf(" (%d)", operators[i].arity);
@@ -153,7 +200,7 @@ static void op_help(stack_t *stk) {
 
         if (operators[i].description) {
             printf(" - %s", operators[i].description);
-        }
+        }         
 
         printf("\n");
     }    
@@ -171,7 +218,8 @@ bool op_call(const char *name, stack_t *stk) {
     
     const operator_t *op = NULL;
     for (int i = 0; operators[i].name; i++) {
-        if (strncmp(name, operators[i].name, MAX_TOKEN_LEN) == 0) {
+        if ((*operators[i].name != '\0')
+            && (strncmp(name, operators[i].name, MAX_TOKEN_LEN) == 0)) {
             op = &operators[i];
             break;
         }
