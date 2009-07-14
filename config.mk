@@ -5,7 +5,7 @@
 # 
 DEFS = -DHISTORY
 
-CFLAGS = -g -ggdb -O0 -Wall -std=c99
+CFLAGS = -g -ggdb -O0
 LIBS = -lm -lreadline
 
 
@@ -15,7 +15,7 @@ LIBS = -lm -lreadline
 APP = rpncalc
 VERSION = 0.1
 
-CFLAGS := $(CFLAGS) -DRPNCALC_VERSION='"$(VERSION)"' $(DEFS)
+CFLAGS := $(CFLAGS) -DRPNCALC_VERSION='"$(VERSION)"' $(DEFS) -Wall -std=c99
 
 HEADERS = \
 	src/eval.h \
@@ -25,7 +25,8 @@ HEADERS = \
 	src/numbers.h \
 	src/operators.h \
 	src/predicates.h \
-	src/util.h
+	src/util.h \
+	src/real_ops.def
 
 SOURCES = \
 	src/eval.c \

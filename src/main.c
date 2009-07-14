@@ -28,7 +28,7 @@
 void print_usage(const char *name) {
     printf(
         "Naudojimas: \n"
-        "    %s [--] BYLA1 [BYLA2] ...\n"
+        "    %s [--] [BYLA1] [BYLA2] ...\n"
         "    %s --eval REIŠKINYS\n"
         "    %s --help\n"
         "    %s --version\n"
