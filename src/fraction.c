@@ -45,17 +45,17 @@ void fraction_free(fraction_t *frac) {
 }
 
 
-fraction_t *fraction_read(const char *str) {
+fraction_t *fraction_read(const char *str, int base) {
     char *endptr;
     fraction_integer_t num, den;
 
     ASSERT(str);
-    num = strtol(str, &endptr, 10);
+    num = strtol(str, &endptr, base);
 
     ASSERT(endptr);
     ASSERT(*endptr == '/');
     endptr++;
-    den = strtol(endptr, NULL, 10);
+    den = strtol(endptr, NULL, base);
 
     return fraction_new(num, den);
 }

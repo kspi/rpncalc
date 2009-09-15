@@ -26,7 +26,7 @@ void fraction_free(fraction_t *frac);
 /*
  * fraction_read - paverčia eilutę į trupmeną.
  */
-fraction_t *fraction_read(const char *str);
+fraction_t *fraction_read(const char *str, int base);
 
 
 /*

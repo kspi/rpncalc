@@ -58,7 +58,10 @@ bool eval(char *str, stack_t *stk) {
         if (!tok) break;
         
         if (tok_number_p(tok)) {
-            stack_push(num_from_str(tok), stk);
+            num_t *x = num_from_str(tok);
+            if (x) {
+                stack_push(x, stk);
+            }
         } else {
             if (!op_call(tok, stk)) {
                 free(tok);

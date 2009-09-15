@@ -132,7 +132,7 @@ int main(int argc, char **argv)
                 }
                 eval(line, stk);
                 add_history(line);
-                eval("stack", stk);
+                if (*stk) eval("stack", stk);
                 free(line);
             }
         } else {

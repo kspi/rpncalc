@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <math.h>
 
 #include "predicates.h"
@@ -183,13 +184,48 @@ void num_print(const num_t *num) {
 
 
 num_t *num_from_str(const char *str) {
-    if (char_in_str_p('.', str)) {
-        return num_new_real(strtod(str, NULL));
-    } else if (char_in_str_p('/', str)) {
-        return num_new_fraction(fraction_read(str));
+    char *rest;
+    const char *nstr;
+    num_t *ret;
+    int base = 10;
+    
+    if (char_in_str_p('#', str)) {
+        base = strtol(str, (char **)&nstr, 10);
+        nstr++;
     } else {
-        return num_new_integer(strtol(str, NULL, 10));
+        nstr = str;
     }
+    
+    if (char_in_str_p('.', nstr)) {
+        /* Floating point */
+        if (base == 10) {
+            return num_new_real(strtod(nstr, NULL));
+        } else if (base == 16) {
+            char *tmp = malloc((strlen(nstr)+3)*sizeof(char));
+            sprintf(tmp, "0x%s", nstr);
+            ret = num_new_real(strtod(tmp, NULL));
+            free(tmp);
+            return ret;
+        } else {
+            e_error("error: floating point literals only support bases of"
+                    "10 and 16, tried to use %d\n", base);
+            return NULL;
+        }
+    } else if (char_in_str_p('/', nstr)) { /* fraction */
+        /* Fraction */
+        return num_new_fraction(fraction_read(nstr, base));
+    } else {
+        /* Integer */
+        ret = num_new_integer(strtol(nstr, &rest, base));
+        if ((rest == nstr) || (rest[0] != '\0')) {
+            e_error("error: malformed integer: %s\n", str);
+            return NULL;
+        } else {
+            return ret;
+        }
+    }
+    
+    EXHAUSTIVE_FUNCTION
 }
 
 
