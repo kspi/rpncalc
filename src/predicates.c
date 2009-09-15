@@ -30,7 +30,8 @@ bool char_word_p(char c) {
 }
 
 bool tok_number_p(const char *tok) {
-    return char_number_p(tok[0]);
+    return char_number_p(tok[0])
+        || ((tok[0] == '-') && char_number_p(tok[1]));
 }
 
 bool tok_word_p(const char *tok) {
