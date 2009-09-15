@@ -3,21 +3,21 @@
 # Possible compilation options to add to DEFS:
 #   -DHISTORY - writes interactive history to ~/.rpncalc_history
 # 
-DEFS = -DHISTORY
+DEFS := -DHISTORY
 
-CFLAGS = -g -ggdb -O0
-LIBS = -lm -lreadline
+CFLAGS := -g -ggdb -O0
+LIBS := -lm -lreadline
 
 
 
 ### The rest shouldn't be modified.
 
-APP = rpncalc
-VERSION = 0.1
+APP := rpncalc
+VERSION := 0.1
 
 CFLAGS := $(CFLAGS) -DRPNCALC_VERSION='"$(VERSION)"' $(DEFS) -Wall -std=c99
 
-HEADERS = \
+HEADERS := \
 	src/eval.h \
 	src/fraction.h \
 	src/frap.h \
@@ -28,7 +28,7 @@ HEADERS = \
 	src/util.h \
 	src/real_ops.def
 
-SOURCES = \
+SOURCES := \
 	src/eval.c \
 	src/fraction.c \
 	src/frap.c \
@@ -39,13 +39,13 @@ SOURCES = \
 	src/predicates.c \
 	src/util.c
 
-OBJS = $(patsubst src/%.c,build/%.o,$(SOURCES))
+OBJS := $(patsubst src/%.c,build/%.o,$(SOURCES))
 
 
-DISTDIRS = \
+DISTDIRS := \
 	src
 
-DISTFILES = \
+DISTFILES := \
 	$(SOURCES) \
 	$(HEADERS) \
 	Makefile \
