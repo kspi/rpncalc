@@ -34,24 +34,28 @@ void num_free(num_t *num);
  */
 void num_set_integer(num_t *num, num_integer_t val);
 void num_set_real(num_t *num, num_real_t val);
+void num_set_fraction(num_t *num, const num_fraction_t *val);
 
 /*
  * Naujų num_t kūrimas
  */
 num_t *num_new_integer(const num_integer_t val);
 num_t *num_new_real(const num_real_t val);
+num_t *num_new_fraction(const num_fraction_t *val);
 
 /*
  * Tipų tikrinimas
  */
 bool num_typep_integer(const num_t *num);
 bool num_typep_real(const num_t *num);
+bool num_typep_fraction(const num_t *num);
 
 /*
  * Griežtas tam tikro tipo grąžinimas
  */
 num_integer_t num_get_integer(const num_t *num);
 num_real_t num_get_real(const num_t *num);
+const num_fraction_t *num_get_fraction(const num_t *num);
 
 /*
  * Laisvas tam tikro tipo grąžinimas (pvz. apvalina real, jei prašomas
@@ -59,6 +63,7 @@ num_real_t num_get_real(const num_t *num);
  */
 num_integer_t num_coerce_integer(const num_t *num);
 num_real_t num_coerce_real(const num_t *num);
+const num_fraction_t *num_coerce_fraction(const num_t *num);
 
 /*
  * Spausdinimas
