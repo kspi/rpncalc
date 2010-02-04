@@ -25,8 +25,9 @@ void e_fatal(const char *fmt, ...) {
 
 
 bool integer_sqrt(long int i, long int *out) {
-    if ((((long int)sqrt(i))*((long int)sqrt(i))) == i) {
-        *out = (long int)sqrt(i);
+    long int root = sqrt(i);
+    if (root * root == i) {
+        *out = root;
         return true;
     } else {
         return false;
