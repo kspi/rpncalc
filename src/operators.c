@@ -89,6 +89,20 @@ DEFOP_1(op_to_float, result = num_new_real(num_coerce_real(x)))
 
 
 /*
+ * op_showtype - parodo reikšmės tipą.
+ */
+static void op_show_type(stack_t *stk) {
+    num_t *x = list_first(*stk);
+    if (num_typep_integer(x)) {
+        printf("integer\n");
+    } else if (num_typep_real(x)) {
+        printf("real\n");
+    } else if (num_typep_fraction(x)) {
+        printf("fraction\n");
+    } EXHAUSTIVE_IF
+}
+
+/*
  * op_show_stack - išveda steko reikšmes nuo naujausios iki
  * seniausios.
  */
@@ -151,7 +165,7 @@ static void op_help(stack_t *stk);
  * operators - statiškas operatorių aprašymas. Paskutinis narys
  * privalo turėti pavadinimą NULL.
  */
-#define OP_SEPARATOR { "\0", 0, NULL, NULL },
+#define OP_SEPARATOR { "\0", 0, NULL, NULL }
 const operator_t operators[] = {
     { "+",      2, op_add, "Sudeda skaičius." },
     { "-",      2, op_sub, "Atima skaičius." },
@@ -161,7 +175,7 @@ const operator_t operators[] = {
     { "sqrt",   1, op_sqrt, "Ištraukia šaknį." },
     { "f",      1, op_to_float, "Paverčia skaičių slankiojančio kablelio skaičiumi." },
 
-    OP_SEPARATOR
+    OP_SEPARATOR,
 
 #define op1(fun) { #fun, 1, op_##fun, NULL },
 #define op2(fun) { #fun, 2, op_##fun, NULL },
@@ -169,7 +183,7 @@ const operator_t operators[] = {
 #undef op1
 #undef op2
     
-    OP_SEPARATOR
+    OP_SEPARATOR,
 
     { "swap",   2, op_swap, "Sukeičia du viršutinius steko narius vietomis." },
     { "drop",   1, op_drop, "Išima viršutinį steko narį." },
@@ -177,13 +191,14 @@ const operator_t operators[] = {
     { ".",      1, op_print, "Atspausdina viršutinį steko narį." },
     { "clear",  -1, op_clear, "Ištuština steką." },
 
-    OP_SEPARATOR
+    OP_SEPARATOR,
 
+    { "type",   0, op_show_type, "Parodo reikšmės tipą." },
     { "help",   0, op_help, "Parodo operatorių sąrašą su aprašymais." },
     { "stack",  0, op_show_stack, "Parodo steko turinį." },
     { "q",      0, op_quit, "Išjungia programą." },
 
-    OP_SEPARATOR
+    OP_SEPARATOR,
 
     { NULL }
 };

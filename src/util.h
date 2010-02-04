@@ -55,6 +55,16 @@
 
 
 /*
+ * EXHAUSTIVE_IF - if'ams, kurių else šaka turėtų būti nepasiekiama.
+ */
+#define EXHAUSTIVE_IF                                               \
+    else {                                                          \
+        e_fatal("error: else block reached where it shouldn't",     \
+                __FILE__,                                           \
+                __LINE__);                                          \
+    }
+
+/*
  * e_error - į stderr spausdina pranešimą, naudojama kaip printf.
  */
 void e_error(const char *fmt, ...);
