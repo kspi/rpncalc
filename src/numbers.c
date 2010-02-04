@@ -167,7 +167,7 @@ void num_fprint(FILE* stream, const num_t *num) {
         fprintf(stream, "%lld", num->value.integer);
         break;
     case NUM_REAL:
-        fprintf(stream, "%Lg", num->value.real);
+        fprintf(stream, "%.10Lg", num->value.real);
         break;
     case NUM_FRACTION:
         fraction_fprint(stream, num->value.fraction);
@@ -196,7 +196,7 @@ num_t *num_from_str(const char *str) {
         nstr = str;
     }
     
-    if (char_in_str_p('.', nstr)) {
+    if (any_char_in_str_p(".eE", nstr)) {
         /* Floating point */
         if (base == 10) {
             return num_new_real(strtod(nstr, NULL));

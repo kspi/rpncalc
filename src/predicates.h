@@ -17,6 +17,7 @@ bool tok_number_p(const char *tok);
 bool tok_word_p(const char *tok);
 
 bool char_in_str_p(char c, const char *str);
+bool any_char_in_str_p(const char *charset, const char *str);
 
 bool divisor_p(long x, long y);
 

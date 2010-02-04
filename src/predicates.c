@@ -48,6 +48,15 @@ bool char_in_str_p(char c, const char *str) {
     return false;
 }
 
+bool any_char_in_str_p(const char *charset, const char *str) {
+    for (int i = 0; charset[i]; ++i) {
+        if (char_in_str_p(charset[i], str)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 /*
  * divisor_p - grąžina true, jei y yra x daliklis.
  */
