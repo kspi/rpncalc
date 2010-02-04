@@ -62,7 +62,7 @@ fraction_t *fraction_read(const char *str, int base) {
 
 
 void fraction_fprint(FILE *stream, const fraction_t *frac) {
-    fprintf(stream, "%ld/%ld", frac->numerator, frac->denominator);
+    fprintf(stream, "%lld/%lld", frac->numerator, frac->denominator);
 }
 
 

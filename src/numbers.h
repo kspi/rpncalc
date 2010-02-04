@@ -17,8 +17,8 @@
 #include "fraction.h"
 
 #ifndef NUM_TYPES_DEFINED
-typedef long num_integer_t;
-typedef double num_real_t;
+typedef long long int num_integer_t;
+typedef long double num_real_t;
 typedef fraction_t num_fraction_t;
 
 typedef struct num_t num_t;

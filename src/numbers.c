@@ -8,8 +8,8 @@
 #include "fraction.h"
 #include "frap.h"
 
-typedef long num_integer_t;
-typedef double num_real_t;
+typedef long long int num_integer_t;
+typedef long double num_real_t;
 typedef fraction_t num_fraction_t;
 
 
@@ -164,10 +164,10 @@ const num_fraction_t *num_coerce_fraction(const num_t *num) {
 void num_fprint(FILE* stream, const num_t *num) {
     switch (num->type) {
     case NUM_INTEGER:
-        fprintf(stream, "%ld", num->value.integer);
+        fprintf(stream, "%lld", num->value.integer);
         break;
     case NUM_REAL:
-        fprintf(stream, "%g", num->value.real);
+        fprintf(stream, "%Lg", num->value.real);
         break;
     case NUM_FRACTION:
         fraction_fprint(stream, num->value.fraction);

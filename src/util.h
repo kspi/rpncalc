@@ -80,7 +80,7 @@ void e_fatal(const char *fmt, ...);
  * integer_sqrt - grąžina true, jei iš x traukiasi šaknis. Tada out
  * nustato į tos šaknies reikšmę.
  */
-bool integer_sqrt(long int x, long int *out);
+bool integer_sqrt(long int x, long long int *out);
 
 
 /*
