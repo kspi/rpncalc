@@ -151,7 +151,7 @@ static void op_help(stack_t *stk);
  * operators - statiškas operatorių aprašymas. Paskutinis narys
  * privalo turėti pavadinimą NULL.
  */
-#define OP_SEPARATOR { "\0" },
+#define OP_SEPARATOR { "\0", 0, NULL, NULL },
 const operator_t operators[] = {
     { "+",      2, op_add, "Sudeda skaičius." },
     { "-",      2, op_sub, "Atima skaičius." },
@@ -192,9 +192,7 @@ const operator_t operators[] = {
 static void op_help(stack_t *stk) {
     printf("\nOperatoriai:\n");
     for (int i = 0; operators[i].name; i++) {
-        if (*operators[i].name != '\0') {
-            printf("    %s", operators[i].name);
-        }
+        printf("    %s", operators[i].name);
 
         if (operators[i].arity > 0) {
             printf(" (%d)", operators[i].arity);
