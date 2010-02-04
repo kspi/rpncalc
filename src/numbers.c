@@ -121,7 +121,7 @@ num_integer_t num_coerce_integer(const num_t *num) {
     case NUM_INTEGER:
         return num->value.integer;
     case NUM_REAL:
-        return round(num->value.real);
+        return llrintl(num->value.real);
     case NUM_FRACTION:
         return fraction_to_long(num->value.fraction);
         

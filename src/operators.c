@@ -56,7 +56,8 @@ DEFOP_2(op_mul, result = num_multiply(x, y))
 DEFOP_2(op_div, result = num_divide(x, y))
 DEFOP_1(op_neg, result = num_negate(x))
 DEFOP_1(op_sqrt, result = num_sqrt(x))
-DEFOP_1(op_to_float, result = num_new_real(num_coerce_real(x)))
+DEFOP_1(op_float, result = num_new_real(num_coerce_real(x)))
+DEFOP_1(op_round, result = num_new_integer(num_coerce_integer(x)))
 
 
 
@@ -173,7 +174,8 @@ const operator_t operators[] = {
     { "/",      2, op_div, "Padalina skaičius." },
     { "neg",    1, op_neg, "Pakeičia skaičiaus ženklą." },
     { "sqrt",   1, op_sqrt, "Ištraukia šaknį." },
-    { "f",      1, op_to_float, "Paverčia skaičių slankiojančio kablelio skaičiumi." },
+    { "float",  1, op_float, "Paverčia skaičių slankiojančio kablelio skaičiumi." },
+    { "round",  1, op_round, "Suapvalina skaičių." },
 
     OP_SEPARATOR,
 
