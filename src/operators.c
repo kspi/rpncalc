@@ -59,6 +59,10 @@ DEFOP_1(op_sqrt, result = num_sqrt(x))
 DEFOP_1(op_float, result = num_new_real(num_coerce_real(x)))
 DEFOP_1(op_round, result = num_new_integer(num_coerce_integer(x)))
 
+#define M_PI_LONG 3.1415926535897932384626433832795029L
+static void op_pi(stack_t *stk) {
+    stack_push(num_new_real(M_PI_LONG), stk);
+}
 
 
 /* real_ops.def faile surašyti su double reikšmėmis dirbančių
@@ -176,6 +180,7 @@ const operator_t operators[] = {
     { "sqrt",   1, op_sqrt, "Ištraukia šaknį." },
     { "float",  1, op_float, "Paverčia skaičių slankiojančio kablelio skaičiumi." },
     { "round",  1, op_round, "Suapvalina skaičių." },
+    { "pi",     0, op_pi, "Įdeda skaičių π į steką." },
 
     OP_SEPARATOR,
 
