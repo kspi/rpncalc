@@ -235,7 +235,7 @@ static void op_help(stack_t *stk) {
  */
 bool op_call(const char *name, stack_t *stk) {
     if (*name == '\0') {
-        e_fatal("error: op_call: empty operator");
+        e_fatal("error: op_call: empty operator\n");
     }
     
     const operator_t *op = NULL;

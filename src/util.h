@@ -29,7 +29,7 @@
  */
 #define ASSERT(expr)                                                    \
     if (!(expr))                                                        \
-        e_fatal("error:%s:%d: assertion failed: %s", __FILE__, __LINE__, #expr)
+        e_fatal("error:%s:%d: assertion failed: %s\n", __FILE__, __LINE__, #expr)
 
 
 /*
@@ -59,7 +59,7 @@
  */
 #define EXHAUSTIVE_IF                                               \
     else {                                                          \
-        e_fatal("error: else block reached where it shouldn't",     \
+        e_fatal("error: else block reached where it shouldn't\n",   \
                 __FILE__,                                           \
                 __LINE__);                                          \
     }
