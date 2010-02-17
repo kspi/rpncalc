@@ -10,20 +10,19 @@
 
 
 fraction_t *fraction_nnormalize(fraction_t *frac) {
-    fraction_integer_t sign, num, den, anum, aden;
-    unsigned long int agcd;
+    fraction_integer_t sign, num, den;
+    unsigned long long anum, aden, agcd;
 
     num = frac->numerator;
+    if (num == 0) return frac;
     den = frac->denominator;
     
-    anum = labs(num);
-    if (anum == 0) anum = 1;
-    aden = labs(den);
+    anum = (unsigned long long)llabs(num);
+    aden = (unsigned long long)llabs(den);
 
-    
     sign = (num/anum)/(den/aden);
 
-    agcd = gcd((unsigned long int)anum, (unsigned long int)aden);
+    agcd = gcd(anum, aden);
 
     frac->numerator = sign * anum / (fraction_integer_t)agcd;
     frac->denominator = aden / (fraction_integer_t)agcd;

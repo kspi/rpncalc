@@ -86,7 +86,7 @@ bool integer_sqrt(long int x, long long int *out);
 /*
  * gcd - randa dviejų skaičių didžiausią bendrą daliklį.
  */
-unsigned long int gcd(unsigned long int u, unsigned long int v);
+unsigned long long gcd(unsigned long long u, unsigned long long v);
 
 
 /*

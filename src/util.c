@@ -36,7 +36,7 @@ bool integer_sqrt(long int i, long long int *out) {
 
 
 /* Kodas paimtas iš http://en.wikipedia.org/wiki/Binary_GCD_algorithm#Implementation */
-unsigned long int gcd(unsigned long int u, unsigned long int v) {
+unsigned long long gcd(unsigned long long u, unsigned long long v) {
     int shift;
  
     /* GCD(0,x) := x */
@@ -63,7 +63,7 @@ unsigned long int gcd(unsigned long int u, unsigned long int v) {
         if (u < v) {
             v -= u;
         } else {
-            unsigned long int diff = u - v;
+            unsigned long long diff = u - v;
             u = v;
             v = diff;
         }
