@@ -6,7 +6,6 @@
 #include "predicates.h"
 #include "util.h"
 #include "fraction.h"
-#include "frap.h"
 
 typedef long long int num_integer_t;
 typedef long double num_real_t;
@@ -151,7 +150,7 @@ const num_fraction_t *num_coerce_fraction(const num_t *num) {
     case NUM_INTEGER:
         return fraction_new(num->value.integer, 1);
     case NUM_REAL:
-        return frap(num->value.real);
+        e_fatal("Coercion of reals to fractions unimplemented.\n");
     case NUM_FRACTION:
         return num->value.fraction;
         

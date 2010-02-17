@@ -10,7 +10,6 @@ CFLAGS := $(CFLAGS) -DRPNCALC_VERSION='"$(VERSION)"' $(DEFS) -Wall -Werror -peda
 HEADERS := \
 	src/eval.h \
 	src/fraction.h \
-	src/frap.h \
 	src/list.h \
 	src/numbers.h \
 	src/operators.h \
@@ -21,7 +20,6 @@ HEADERS := \
 SOURCES := \
 	src/eval.c \
 	src/fraction.c \
-	src/frap.c \
 	src/list.c \
 	src/main.c \
 	src/numbers.c \
