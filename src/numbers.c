@@ -46,6 +46,8 @@ void num_set_real(num_t *num, num_real_t val) {
 void num_set_fraction(num_t *num, const num_fraction_t *val) {
     if (fraction_denominator(val) == 1) {
         num_set_integer(num, fraction_numerator(val));
+    } else if (fraction_numerator(val) == 0) {
+        num_set_integer(num, 0);
     } else {
         num->type = NUM_FRACTION;
         num->value.fraction = val;
