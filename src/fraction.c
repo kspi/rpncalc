@@ -17,7 +17,9 @@ fraction_t *fraction_nnormalize(fraction_t *frac) {
     den = frac->denominator;
     
     anum = labs(num);
+    if (anum == 0) anum = 1;
     aden = labs(den);
+
     
     sign = (num/anum)/(den/aden);
 
@@ -31,6 +33,8 @@ fraction_t *fraction_nnormalize(fraction_t *frac) {
 
 
 fraction_t *fraction_new(fraction_integer_t numerator, fraction_integer_t denominator) {
+    ASSERT(denominator != 0);
+
     fraction_t *frac = malloc(sizeof(fraction_t));
     frac->numerator = numerator;
     frac->denominator = denominator;
