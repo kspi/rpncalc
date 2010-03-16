@@ -128,14 +128,14 @@ num_real_t num_coerce_real(const num_t *num) {
 }
 
 
-const num_fraction_t *num_coerce_fraction(const num_t *num) {
+num_fraction_t *num_coerce_fraction(const num_t *num) {
     switch (num->type) {
     case NUM_INTEGER:
         return fraction_new(num->value.integer, 1);
     case NUM_REAL:
         e_fatal("Coercion of reals to fractions unimplemented.\n");
     case NUM_FRACTION:
-        return num->value.fraction;
+        return fraction_copy(num->value.fraction);
         
     EXHAUSTIVE_SWITCH
     }
@@ -261,8 +261,12 @@ num_t *num_add(const num_t *x, const num_t *y) {
     if (num_typep_real(x) || num_typep_real(y)) {
         return num_new_real(num_coerce_real(x) + num_coerce_real(y));
     } else if (num_typep_fraction(x) || num_typep_fraction(y)) {
-        return num_new_fraction(fraction_add(num_coerce_fraction(x),
-                                             num_coerce_fraction(y)));
+        num_fraction_t *xf = num_coerce_fraction(x);
+        num_fraction_t *yf = num_coerce_fraction(y);
+        num_t *ret = num_new_fraction(fraction_add(xf, yf));
+        free(xf);
+        free(yf);
+        return ret;
     } else {
         return num_new_integer(num_get_integer(x) + num_get_integer(y));
     }
@@ -296,8 +300,12 @@ num_t *num_multiply(const num_t *x, const num_t *y) {
     if (num_typep_real(x) || num_typep_real(y)) {
         return num_new_real(num_coerce_real(x) * num_coerce_real(y));
     } else if (num_typep_fraction(x) || num_typep_fraction(y)) {
-        return num_new_fraction(fraction_multiply(num_coerce_fraction(x),
-                                                  num_coerce_fraction(y)));
+        num_fraction_t *xf = num_coerce_fraction(x);
+        num_fraction_t *yf = num_coerce_fraction(y);
+        num_t *ret = num_new_fraction(fraction_multiply(xf, yf));
+        free(xf);
+        free(yf);
+        return ret;
     } else {
         return num_new_integer(num_get_integer(x) * num_get_integer(y));
     }
@@ -319,8 +327,12 @@ num_t *num_divide(const num_t *x, const num_t *y) {
     } else if (num_typep_fraction(x)
                || num_typep_fraction(y)
                || num_integer_divisor_p(x, y)) {
-        return num_new_fraction(fraction_divide(num_coerce_fraction(x),
-                                                num_coerce_fraction(y)));
+        num_fraction_t *xf = num_coerce_fraction(x);
+        num_fraction_t *yf = num_coerce_fraction(y);
+        num_t *ret = num_new_fraction(fraction_divide(xf, yf));
+        free(xf);
+        free(yf);
+        return ret;
     } else {
         return num_new_integer(num_get_integer(x) / num_get_integer(y));
     }

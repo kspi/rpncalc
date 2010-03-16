@@ -71,11 +71,12 @@ const num_fraction_t *num_get_fraction(const num_t *num);
 
 /*
  * Laisvas tam tikro tipo grąžinimas (pvz. apvalina real, jei prašomas
- * integer)
+ * integer). Jei grąžinama trupmena, tai ji priklauso vartotojui, t.y.
+ * jo pareiga ją atlaisvinti.
  */
 num_integer_t num_coerce_integer(const num_t *num);
 num_real_t num_coerce_real(const num_t *num);
-const num_fraction_t *num_coerce_fraction(const num_t *num);
+num_fraction_t *num_coerce_fraction(const num_t *num);
 
 /*
  * Spausdinimas
