@@ -1,36 +1,41 @@
 /* -*- mode: c -*- */
 
-op1(acos)
-op1(acosh)
-op1(asin)
-op1(asinh)
-op1(atan)
-op1(atanh)
-op1(cbrt)
-op1(ceil)
-op1(cos)
-op1(cosh)
-op1(exp)
-op1(exp2)
-op1(expm1)
-op1(fabs)
-op1(floor)
-op1(ilogb)
-op1(lgamma)
-op1(log)
-op1(log10)
-op1(log1p)
-op1(log2)
-op1(logb)
-op1(sin)
-op1(sinh)
-op1(tan)
-op1(tanh)
-op1(tgamma)
-op1(trunc)
-op2(copysign)
-op2(fmax)
-op2(fmin)
-op2(fmod)
-op2(pow)
-op2(remainder)
+op1(sin, sinl, NULL)
+op1(asin, asinl, NULL)
+
+op1(cos, cosl, NULL)
+op1(acos, acosl, NULL)
+
+op1(tan, tanl, NULL)
+op1(atan, atanl, NULL)
+
+op2(atan2, atan2l, "Dviejų reikšmių santykio arktangentas.")
+
+op1(sinh, sinhl, NULL)
+op1(asinh, asinhl, NULL)
+
+op1(cosh, coshl, NULL)
+op1(acosh, acoshl, NULL)
+
+op1(tanh, tanhl, NULL)
+op1(atanh, atanhl, NULL)
+
+op1(ceil, ceill, NULL)
+op1(floor, floorl, NULL)
+
+op1(abs, fabsl, NULL)
+
+op1(exp, expl, "Konstanta e pakelta duotu laipsniu.")
+op1(ln, logl, "Logaritmas bazėje e.")
+
+op1(log2, log2l, NULL)
+op1(lg, log10l, "Logaritmas bazėje 10.")
+
+op1(gamma, tgammal, "Gama funkcija, su sveikom x reikšmėm gamma(x+1) = x!")
+
+op2(max, fmaxl, NULL)
+op2(min, fminl, NULL)
+op2(mod, fmodl, NULL)
+
+op2(pow, powl, "Kėlimas laipsniu. Visada grąžina realųjį skaičių.") 
+/* TODO: nevisada grąžinti realųjį skaičių */

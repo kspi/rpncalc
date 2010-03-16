@@ -67,17 +67,19 @@ static void op_pi(stack_t *stk) {
 
 /* real_ops.def faile surašyti su double reikšmėmis dirbančių
  * operatorių apibrėžimai op1 ir op2 makrokomandomis. Čia jie
- * paverčiami funkcjiomis.
+ * paverčiami funkcjiomis. Name yra operatoriaus pavadinimas, o
+ * realname -- C funkcijos. Doc yra operatoriaus aprašymas, kuris
+ * naudojamas kitame op1/op2 apibrėžime.
  */
-#define op1(name)                                  \
+#define op1(name, realname, doc)                   \
     static void op_##name (stack_t *_stk) {        \
         num_t *x = (num_t*)stack_pop(_stk);        \
         num_real_t xr = num_coerce_real(x);        \
         num_free(x);                               \
-        num_t *result = num_new_real(name(xr));    \
+        num_t *result = num_new_real(realname(xr)); \
         stack_push(result, _stk);                  \
     }
-#define op2(name)                                   \
+#define op2(name, realname, doc)                    \
     static void op_##name (stack_t *_stk) {         \
         num_t *x = (num_t*)stack_pop(_stk);         \
         num_real_t xr = num_coerce_real(x);         \
@@ -85,7 +87,7 @@ static void op_pi(stack_t *stk) {
         num_t *y = (num_t*)stack_pop(_stk);         \
         num_real_t yr = num_coerce_real(y);         \
         num_free(y);                                \
-        num_t *result = num_new_real(name(yr, xr)); \
+        num_t *result = num_new_real(realname(yr, xr)); \
         stack_push(result, _stk);                   \
     }
 #include "real_ops.def"
@@ -184,8 +186,8 @@ const operator_t operators[] = {
 
     OP_SEPARATOR,
 
-#define op1(fun) { #fun, 1, op_##fun, NULL },
-#define op2(fun) { #fun, 2, op_##fun, NULL },
+#define op1(name, _, doc) { #name, 1, op_##name, doc },
+#define op2(name, _, doc) { #name, 2, op_##name, doc },
 #include "real_ops.def"
 #undef op1
 #undef op2
