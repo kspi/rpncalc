@@ -53,12 +53,12 @@ fraction_t *fraction_read(const char *str, int base) {
     fraction_integer_t num, den;
 
     ASSERT(str);
-    num = strtol(str, &endptr, base);
+    num = strtoll(str, &endptr, base);
 
     ASSERT(endptr);
     ASSERT(*endptr == '/');
     endptr++;
-    den = strtol(endptr, NULL, base);
+    den = strtoll(endptr, NULL, base);
 
     return fraction_new(num, den);
 }

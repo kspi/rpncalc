@@ -198,7 +198,7 @@ num_t *num_from_str(const char *str) {
         return num_new_fraction(fraction_read(nstr, base));
     } else {
         /* Integer */
-        ret = num_new_integer(strtol(nstr, &rest, base));
+        ret = num_new_integer(strtoll(nstr, &rest, base));
         if ((rest == nstr) || (rest[0] != '\0')) {
             e_error("error: malformed integer: %s\n", str);
             return NULL;
