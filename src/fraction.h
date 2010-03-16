@@ -4,7 +4,9 @@
 
 #include <stdio.h>
 
-typedef long long fraction_integer_t;
+#include "util.h"
+
+typedef util_integer_t fraction_integer_t;
 
 typedef struct {
     fraction_integer_t numerator;

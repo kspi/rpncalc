@@ -60,6 +60,6 @@ bool any_char_in_str_p(const char *charset, const char *str) {
 /*
  * divisor_p - grąžina true, jei y yra x daliklis.
  */
-bool divisor_p(long x, long y) {
+bool divisor_p(util_integer_t x, util_integer_t y) {
     return (x % y) == 0;
 }

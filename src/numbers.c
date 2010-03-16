@@ -7,25 +7,6 @@
 #include "util.h"
 #include "fraction.h"
 
-typedef long long int num_integer_t;
-typedef long double num_real_t;
-typedef fraction_t num_fraction_t;
-
-
-enum num_type_enum {
-    NUM_INTEGER,
-    NUM_REAL,
-    NUM_FRACTION
-};
-
-typedef struct {
-    enum num_type_enum type;
-    union {
-        num_integer_t integer;
-        num_real_t real;
-        const num_fraction_t *fraction;
-    } value;
-} num_t;
 
 #define NUM_TYPES_DEFINED
 #include "numbers.h"

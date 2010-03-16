@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <math.h>
 
+#include "util.h"
+
 void e_error(const char *fmt, ...) {
     va_list args;
 
@@ -24,10 +26,10 @@ void e_fatal(const char *fmt, ...) {
 }
 
 
-bool integer_sqrt(long int i, long long int *out) {
-    long int root = sqrt(i);
+bool integer_sqrt(util_integer_t i, util_integer_t *out) {
+    util_integer_t root = sqrt(i);
     if (root * root == i) {
-        *out = root;
+        if (out) *out = root;
         return true;
     } else {
         return false;

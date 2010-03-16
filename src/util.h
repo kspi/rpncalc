@@ -8,6 +8,9 @@
 
 #include <stdbool.h>
 
+typedef signed long long int util_integer_t;
+typedef long double util_real_t;
+
 #define RPNCALC_DEBUG
 
 /*
@@ -77,10 +80,10 @@ void e_fatal(const char *fmt, ...);
 
 
 /*
- * integer_sqrt - grąžina true, jei iš x traukiasi šaknis. Tada out
- * nustato į tos šaknies reikšmę.
+ * integer_sqrt - grąžina true, jei iš x traukiasi šaknis. Tada out,
+ * jei jis nelygus NULL, nustato į tos šaknies reikšmę.
  */
-bool integer_sqrt(long int x, long long int *out);
+bool integer_sqrt(util_integer_t x, util_integer_t *out);
 
 
 /*

@@ -16,13 +16,25 @@
 #include "predicates.h"
 #include "fraction.h"
 
-#ifndef NUM_TYPES_DEFINED
-typedef long long int num_integer_t;
-typedef long double num_real_t;
+typedef util_integer_t num_integer_t;
+typedef util_real_t num_real_t;
 typedef fraction_t num_fraction_t;
 
-typedef struct num_t num_t;
-#endif
+
+enum num_type_enum {
+    NUM_INTEGER,
+    NUM_REAL,
+    NUM_FRACTION
+};
+
+typedef struct {
+    enum num_type_enum type;
+    union {
+        num_integer_t integer;
+        num_real_t real;
+        const num_fraction_t *fraction;
+    } value;
+} num_t;
 
 /*
  * Atminties atlaisvinimas
