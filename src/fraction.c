@@ -11,14 +11,15 @@
 
 fraction_t *fraction_nnormalize(fraction_t *frac) {
     fraction_integer_t sign, num, den;
-    unsigned long long anum, aden, agcd;
+    fraction_integer_t anum, aden;
+    unsigned long long agcd;
 
     num = frac->numerator;
     if (num == 0) return frac;
     den = frac->denominator;
     
-    anum = (unsigned long long)llabs(num);
-    aden = (unsigned long long)llabs(den);
+    anum = llabs(num);
+    aden = llabs(den);
 
     sign = (num/anum)/(den/aden);
 
