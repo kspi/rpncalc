@@ -12,8 +12,11 @@
 * Naudojimas
 
   ~./rpncalc [--] [BYLA1] [BYLA2] ...~
+
   ~./rpncalc --eval REIŠKINYS~
+
   ~./rpncalc --help~
+
   ~./rpncalc --version~
   
   BYLA gali būti -, tada skaitoma iš stdin. Jei neduota nei viena
