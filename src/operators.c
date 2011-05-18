@@ -198,11 +198,11 @@ const operator_t operators[] = {
     { "drop",   1, op_drop, "Išima viršutinį steko narį." },
     { "dup",    1, op_dup, "Nukopijuoja viršutinį steko narį." },
     { ".",      1, op_print, "Atspausdina viršutinį steko narį." },
-    { "clear",  -1, op_clear, "Ištuština steką." },
+    { "clear", -1, op_clear, "Ištuština steką." },
 
     OP_SEPARATOR,
 
-    { "type",   0, op_show_type, "Parodo reikšmės tipą." },
+    { "type",   1, op_show_type, "Parodo reikšmės tipą." },
     { "help",   0, op_help, "Parodo operatorių sąrašą su aprašymais." },
     { "stack",  0, op_show_stack, "Parodo steko turinį." },
     { "q",      0, op_quit, "Išjungia programą." },
