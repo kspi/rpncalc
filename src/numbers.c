@@ -149,7 +149,19 @@ void num_fprint(FILE* stream, const num_t *num) {
         fprintf(stream, "%lld", num->value.integer);
         break;
     case NUM_REAL:
-        fprintf(stream, "%.10Lg", num->value.real);
+        {
+            const int NS = 255;
+            char s[NS];
+            snprintf(s, NS, "%.10Lg", num->value.real);
+            s[NS-2] = 0;
+            char *p = s;
+            while ((*p) && (*p != '.')) p++;
+            if (!*p) {
+                *p = '.';
+                p[1] = 0;
+            }
+            fprintf(stream, "%s", s);
+        }
         break;
     case NUM_FRACTION:
         fraction_fprint(stream, num->value.fraction);
